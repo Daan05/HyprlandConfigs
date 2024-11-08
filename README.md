@@ -1,139 +1,152 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-{
-  config,
-  pkgs,
-  ...
-}: {
-  imports = [
-    # Include the results of the hardware scan.
-    ./hardware-configuration.nix
-  ];
+configuration {
+    modi: "run,drun,window";
+    icon-theme: "Papirus Dark";
+    show-icons: true;
+    terminal: "alacritty";
+    drun-display-format: "{icon} {name}";
+    location: 0;
+    disable-history: false;
+    hide-scrollbar: true;
+    display-drun: " 󰀻  Apps ";
+    display-run: "   Run ";
+    display-window: "   Windows";
+    display-Network: " 󰤨  Network";
+    sidebar-mode: true;
+}
 
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+//@theme "/nix/store/js0rnlgk75w4zx68d5i0hrgfnlkx8610-rofi-1.7.5+wayland3/share/rofi/themes/fancy2.rasi"
 
-  services = {
-    xserver = {
-      enable = true;
-      videoDrivers = ["nvidia"];
-      displayManager.gdm.enable = true;
-    };
+//@theme "/nix/store/js0rnlgk75w4zx68d5i0hrgfnlkx8610-rofi-1.7.5+wayland3/share/rofi/themes/fancy.rasi"
 
-    # Configure keymap in X11
-    xserver.xkb = {
-      layout = "us";
-      variant = "";
-    };
+@theme "~/.config/rofi/theme.rasi"
 
-    pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-      jack.enable = true;
-    };
-  };
+-------------------------------------------------------------------------------------
 
-  hardware = {
-    nvidia = {
-      modesetting.enable = true;
-      powerManagement.enable = true;
-      powerManagement.finegrained = false;
-      open = false;
-      nvidiaSettings = true;
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
-      prime = {
-        offload = {
-          enable = true;
-          enableOffloadCmd = true;
-        };
-        nvidiaBusId = "PCI:1:0:0";
-        amdgpuBusId = "PCI:5:0:0";
-      };
-    };
-    opengl.enable = true;
-  };
+// define colors etc.
+* {
+    bg: #202020;
+    hv: #DDDDDD; 
+    primary: #FFFFFF; 
+    ug: #FF0000;
+    font: "Monospace 11";
+    background-color: @bg;
+    //dark: @bg;
+    border: 0px;
+    kl: #FFFFFF;
+    black: #000000;
 
+    transparent: rgba(46,52,64,0);
+}
 
-  # Enable networking
-  networking.hostName = "nixos";
-  networking.networkmanager.enable = true;
+// defines different aspects of the window
+window {
+    width: 1000;
+    height: 800;
 
-  xdg.portal.enable = true;
-  xdg.portal.extraPortals = [pkgs.xdg-desktop-portal-gtk];
+    orientation: horizontal;
+    location: center;
+    anchor: center;
+    transparency: "screenshot";
+    border-color: @transparent;   
+    border: 0px;
+    border-radius: 6px;
+    spacing: 0;
+    children: [ mainbox ];
+}
 
-  # Set your time zone.
-  time.timeZone = "Europe/Amsterdam";
+mainbox {
+    spacing: 0;
+    children: [ inputbar, message, listview ];
+}
 
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
+inputbar {
+    color: @kl;
+    padding: 11px;
+    border: 3px 3px 2px 3px;
+    border-color: #606060;
+    border-radius: 6px 6px 0px 0px;
+}
 
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
-  };
+message {
+    padding: 0;
+    border-color: @primary;
+    border: 0px 1px 1px 1px;
+}
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.dhval = {
-    isNormalUser = true;
-    description = "Daan Valkema";
-    extraGroups = ["networkmanager" "wheel"];
-    packages = with pkgs; [
-      discord
-      firefox
-      unzip
-      xfce.thunar
-      vscode
-      kitty
-      dunst
-      libnotify
-      alacritty
-      brightnessctl
-      rofi-wayland
-      hyprpaper
-      hyprlock
-      waybar
-      brillo
-    ];
-  };
+entry, prompt, case-indicator {
+    text-font: inherit;
+    text-color: inherit;
+}
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+entry {
+    cursor: pointer;
+}
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment = {
-    systemPackages = with pkgs; [
-      vim
-      neovim
-      wget
-      git
-      curl
-      tree
-      neofetch
-      alejandra
-    ];
+prompt {
+    margin: 0px 5px 0px 0px;
+}
 
-    sessionVariables = {
-      WLR_NO_HARDWARE_CURSORS = "1";
-      NIXOS_OZONE_WL = "1";
-    };
-  };
+listview {
+    layout: vertical;
+    //spacing: 5px;
+    padding: 8px;
+    lines: 7;
+    columns: 1;
+    border: 0px 3px 3px 3px; 
+    border-radius: 0px 0px 6px 6px;
+    border-color: #606060;
+    dynamic: false;
+}
 
-  programs.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-  };
+element {
+    padding: 2px;
+    vertical-align: 1;
+    color: @kl;
+    font: inherit;
+}
 
-  system.stateVersion = "24.05";
+element-text {
+    background-color: inherit;
+    text-color: inherit;
+    vertical-align: 0.5;
+}
+
+element selected.normal {
+    color: @black;
+    background-color: @hv;
+}
+
+element normal active {
+    background-color: @hv;
+    color: @black;
+}
+
+element-icon {
+    background-color: inherit;
+    text-color: inherit;
+    size: 2.5em;
+}
+
+element normal urgent {
+    background-color: @primary;
+}
+
+element selected active {
+    background: @hv;
+    foreground: @bg;
+}
+
+button {
+    padding: 6px;
+    color: @primary;
+    horizonatal-align: 0.5;
+
+    border: 2px 0px 2px 2px;
+    border-radius: 4px 0px 0px 4px;
+    border-color: @primary;
+}
+
+button selected normal {
+    border: 2px 0px 2px 2px;
+    border-color: @primary;
 }
