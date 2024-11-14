@@ -50,7 +50,7 @@
     "custom/exit": {
         "format": "⏻",
         "tooltip-format": "Powermenu",
-        "on-click": "wlogout -b 4",
+        "on-click": "rofi -show power-menu -modi power-menu:rofi-power-menu",
         "tooltip": false
     },
 
@@ -87,13 +87,13 @@
     // CPU
     "cpu": {
         "format": "/ C {usage}% ",
-        "on-click": "kitty -e htop"
+        "on-click": "missioncenter"
     },
 
     // Memory
     "memory": {
         "format": "/ M {}% ",
-        "on-click": "kitty -e htop"
+        "on-click": "missioncenter"
     },
 
     // Harddisc space used
@@ -101,7 +101,7 @@
         "interval": 30,
         "format": "D {percentage_used}% ",
         "path": "/",
-        "on-click": "kitty -e htop"
+        "on-click": "missioncenter"
     }, 
 
     "hyprland/language": {
@@ -161,9 +161,9 @@
         "format": "{icon}  {volume}%",
         "format-bluetooth": "{volume}% {icon} {format_source}",
         "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
-        "format-source": "{volume}% ",
-        "format-source-muted": "",
+        //"format-muted": " {format_source}",
+        //"format-source-muted": "",
+	"format-muted": "muted",
         "format-icons": {
             "headphone": "",
             "hands-free": "",
@@ -173,7 +173,7 @@
             "car": "",
             "default": ["", " ", " "]
         },
-        "on-click": "pavucontrol"
+        "on-click": "pwvucontrol"
     },
 
     // Bluetooth
@@ -187,7 +187,7 @@
 
     // Backlight
     "backlight": {
-	"format": "{icon} {percent}%",
+	"format": "{icon}  {percent}%",
 	"device": "intel_backlight",
 	"format-icons": ["", ""]
     },
