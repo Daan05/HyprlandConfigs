@@ -31,7 +31,7 @@ require("lazy").setup({
     -- colorscheme that will be used when installing plugins.
     install = { colorscheme = { "onedark" } },
     -- automatically check for plugin updates
-    checker = { enabled = true, notify = false},
+    checker = { enabled = true, notify = false },
 })
 
 
@@ -65,37 +65,28 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
         vim.keymap.set({ 'n', 'x' }, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
         vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+        vim.keymap.set("n", "<leader>h", "<cmd>ClangdSwitchSourceHeader<CR>")
+    end,
+})
+
+-- Format on save
+vim.api.nvim_create_autocmd("BufWritePre", {
+    callback = function()
+        vim.lsp.buf.format() -- Use LSP for formatting
     end,
 })
 
 require('lspconfig').rust_analyzer.setup({
     settings = {},
 })
+
 require('lspconfig').clangd.setup({
-    filetypes = { "c", "cpp", "cc", "hh", "ih", "h","hpp"},
+    filetypes = { "c", "cpp", "cc", "hh", "ih", "h", "hpp" },
     settings = {},
 })
 
-require('lspconfig').nixd.setup({
-    cmd = { "nixd" },
-    settings = {
-        nixd = {
-            nixpkgs = {
-                expr = "import <nixpkgs> { }",
-            },
-            formatting = {
-                command = { "alejandra" },
-            },
-            options = {
-                nixos = {
-                    expr = '(builtins.getFlake \"/etc/nixos\").nixosConfigurations.nix-host.options',
-                },
-                home_manager = {
-                    expr = '(builtins.getFlake \"/etc/nixos\").homeConfigurations.nix-host.options',
-                },
-            },
-        }
-    }
+require('lspconfig').zls.setup({
+    settings = {},
 })
 
 local cmp = require('cmp')

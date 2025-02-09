@@ -10,3 +10,4 @@ vim.opt.scrolloff = 8
 
 vim.opt.showmode = false
 
+vim.o.cmdheight = 2
