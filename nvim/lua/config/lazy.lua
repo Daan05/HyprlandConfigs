@@ -89,6 +89,28 @@ require('lspconfig').zls.setup({
     settings = {},
 })
 
+local configs = require("lspconfig.configs")
+if not configs.crust_lsp then
+    configs.crust_lsp = {
+        default_config = {
+            cmd = { "/home/dhval/Dev/rust/crust-lsp/target/debug/crust-lsp" },
+            filetypes = { "crust" },
+            root_dir = function(fname)
+                return vim.fn.getcwd()
+            end,
+        },
+    }
+end
+
+require("lspconfig").crust_lsp.setup({
+    on_attach = function(client, bufnr)
+        print("Attached crust_lsp")
+    end,
+    on_init = function(client)
+        print("Initializing crust_lsp")
+    end,
+})
+
 local cmp = require('cmp')
 
 cmp.setup({
