@@ -70,11 +70,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 -- Format on save
-vim.api.nvim_create_autocmd("BufWritePre", {
-    callback = function()
-        vim.lsp.buf.format() -- Use LSP for formatting
-    end,
-})
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+--     callback = function()
+--         vim.lsp.buf.format() -- Use LSP for formatting
+--     end,
+-- })
 
 require('lspconfig').rust_analyzer.setup({
     settings = {},
@@ -93,7 +93,7 @@ local configs = require("lspconfig.configs")
 if not configs.crust_lsp then
     configs.crust_lsp = {
         default_config = {
-            cmd = { "/home/dhval/Dev/rust/crust-lsp/target/debug/crust-lsp" },
+            cmd = { "/home/dhval/Dev/rust/crust-lsp/target/release/crust-lsp" },
             filetypes = { "crust" },
             root_dir = function(fname)
                 return vim.fn.getcwd()
